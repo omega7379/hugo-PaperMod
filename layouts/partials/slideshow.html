@@ -1,0 +1,21 @@
+{{ with site.Params.profileMode }}
+{{ $slideshowLen := len .slideshow.images}}
+<div class="slideshow-container">
+    {{ range $idx, $elem := .slideshow.images }}
+    <div class="slideshow-slide slideshow-fade">
+        <div class="slideshow-numbertext">{{- add 1 $idx -}} / {{- $slideshowLen -}}</div>
+        <img src="{{ $elem }}" style="width: 100%;" />
+    </div>
+    {{ end }}
+    <a class="slideshow-prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="slideshow-next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+
+<br/>
+
+<div style="text-align: center;">
+    {{ range seq $slideshowLen }}
+        <span class="slideshow-slide-dots" onclick="currentSlide({{ add 1 . }})"></span>
+    {{ end }}
+</div>
+{{ end }}

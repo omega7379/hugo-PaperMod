@@ -1,8 +1,53 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
+<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default " auto" }}">
 
 <head>
     {{- partial "head.html" . }}
+
+    {{ if (and site.Params.profileMode site.Params.profileMode.slideshow .IsHome) }}
+    {{ $slideshowCSS := resources.Get "css/extended/slideshow.css" }}
+    <link crossorigin="anonymous" href="{{ $slideshowCSS.RelPermalink }}" rel="preload stylesheet" as="style" />
+    <script>
+        let slideIndex = 1;
+
+        window.onload = () => {
+            showSlides(slideIndex);
+        }
+
+        const plusSlides = (n) => {
+            slideIndex += n;
+            showSlides(slideIndex);
+        }
+
+        const currentSlide = (n) => {
+            slideIndex = n;
+            showSlides(slideIndex);
+        }
+
+        const showSlides = (n) => {
+            let i;
+            let slides = document.getElementsByClassName("slideshow-slide");
+            let dots = document.getElementsByClassName("slideshow-slide-dots");
+
+            if (n > slides.length) {
+                slideIndex = 1;
+            }
+            if (n < 1) {
+                slideIndex = slides.length;
+            }
+
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+    </script>
+    {{ end }} {{/* end slideshow */}}
 </head>
 
 <body class="
@@ -17,6 +62,9 @@
     <main class="main">
         {{- block "main" . }}{{ end }}
     </main>
+    {{ if (and site.Params.profileMode site.Params.profileMode.slideshow .IsHome) }}
+        {{- partialCached "slideshow.html" . -}}
+    {{ end }}
     {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}}
 </body>
 
