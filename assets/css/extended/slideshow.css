@@ -4,9 +4,9 @@
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 100%;
+  width: 100vw;
   position: absolute;
-  transform: translateY(-100%);
+  transform: translateY(-90%);
   margin: auto;
   z-index: -1;
 }
